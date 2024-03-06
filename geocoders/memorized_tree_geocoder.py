@@ -11,15 +11,24 @@ class MemorizedTreeGeocoder(Geocoder):
         else:
             self.__data = data
 
-    """
-        TODO:
-        Сделать функцию перебора дерева:
-        - Для каждого узла сохранять в словарь адресов
-    """
+        self.addresses = {}
+        for country in self.__data:
+            self.bfs_with_memory(country)
 
     def _apply_geocoding(self, area_id: str) -> str:
-        """
-            TODO:
-            - Возвращать данные из словаря с адресами
-        """
-        raise NotImplementedError()
+        return self.addresses[str(area_id)]
+
+    # Перебор дерева в ширину с запоминанием вершин
+    def bfs_with_memory(self, tree):
+
+        if tree.parent_id is not None:
+            self.addresses[tree.id] = "{}, {}".format(self.addresses[tree.parent_id],
+                                                      tree.name)
+        else:
+            self.addresses[tree.id] = tree.name
+
+        for child in tree.areas:
+            self.addresses[child.id] = "{}, {}".format(self.addresses[child.parent_id],
+                                                       child.name)
+            if len(child.areas) != 0:
+                self.bfs_with_memory(child)

@@ -14,9 +14,8 @@ def dict_to_dataframe(data_dict):
 
 
 def plot_data(df):
-    """Строит график времени работы алгоритмов на основе DataFrame, упорядоченный по количеству данных."""
+    """Построение графика времени работы алгоритмов на основе DataFrame"""
     fig, ax = plt.subplots()
-    # Сортировка по алгоритму и количеству данных для последовательного отображения
     for algorithm in df['Алгоритм'].unique():
         alg_data = df[df['Алгоритм'] == algorithm]
         ax.plot(alg_data['Количество данных'], alg_data['Время работы (мс)'], label=algorithm, marker='o')
