@@ -11,29 +11,22 @@ class SimpleTreeGeocoder(Geocoder):
             self.__data = data
 
     def _apply_geocoding(self, area_id: str) -> str:
-        result = None
-        for country in self.__data:
-            if result is None:
-                result = self.bfs(country, str(area_id))
+        result = self.bfs(self.__data, str(area_id))
         return ", ".join([node.name for node in result][::-1])
 
     # Перебор дерева в ширину
-    def bfs(self, tree, area_id: str) -> list[TreeNode] | None:
+    def bfs(self, root_children, area_id: str) -> list[TreeNode] | None:
         result = []
+        for node in root_children:
 
-        if tree.id == area_id:
-            result.append(tree)
-            return result
-
-        for child in tree.areas:
-            if child.id == area_id:
-                result.append(child)
-                result.append(tree)
+            if node.id == area_id:
+                result.append(node)
                 return result
-            if len(child.areas) != 0:
-                return_res = self.bfs(child, area_id)
-                if return_res is not None:
-                    result.extend(return_res)
-                    result.append(tree)
+            if len(node.areas) != 0:
+                res_return = self.bfs(node.areas, area_id)
+                if res_return:
+                    result.extend(res_return)
+                    result.append(node)
                     return result
-        return None
+
+
