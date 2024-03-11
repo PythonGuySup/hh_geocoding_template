@@ -17,8 +17,8 @@ class SimpleTreeGeocoder(Geocoder):
     # Перебор дерева в ширину
     def bfs(self, root_children, area_id: str) -> list[TreeNode] | None:
         result = []
-        for node in root_children:
 
+        for node in root_children:
             if node.id == area_id:
                 result.append(node)
                 return result
@@ -28,5 +28,3 @@ class SimpleTreeGeocoder(Geocoder):
                     result.extend(res_return)
                     result.append(node)
                     return result
-
-
